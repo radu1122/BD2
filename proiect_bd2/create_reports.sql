@@ -150,21 +150,3 @@ GO
 
 SELECT * FROM dbo.GET_ALL_OFFERS_BY_STARS(5);
 GO
-
-
-CREATE OR ALTER FUNCTION dbo.GET_SUBORDINATES_WITH_LOWER_SALARY
-(@ManagerId INT, @Salary REAL = NULL)
-RETURNS INT AS
-BEGIN
-
-    DECLARE @result INT;
-
-    SELECT @result = COUNT(*)
-    FROM tourism_db.dbo.employees;
-
-    RETURN @result;
-END
-GO
-
-/* call the function and print the result */
-SELECT dbo.GET_SUBORDINATES_WITH_LOWER_SALARY(1, 1000);

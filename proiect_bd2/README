@@ -4,6 +4,7 @@ Prerequisite:
 
 - docker installed
 - python3 installed
+- python modules installed: pymssql, tabulate
 
 How to run the db engine in a docker container:
 
@@ -18,7 +19,7 @@ How to run the project:
 
 - run db_setup.sql script in the db to create the db and the tables
 - run populate_db.sql script in the db to populate the db with data
-- run create_reports.sql script in the db to create the reports
+- run create_reports.sql script in the db to create the stored procedures(functions) used for the reports
 - run the project with python3 main.py
 
 Biografie:
@@ -26,3 +27,4 @@ Biografie:
 - https://ocw.cs.pub.ro/courses/bd2/laboratoare/09
 - https://drawsql.app/
 - https://database.guide/how-to-install-sql-server-on-an-m1-mac-arm64/
+- https://stackoverflow.com/questions/40056747/print-a-list-of-dictionaries-in-table-form

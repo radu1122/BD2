@@ -1,4 +1,14 @@
 import pymssql
+import tabulate
+
+STATUSES = ['Pending', 'Done']
+STARS = [1, 2, 3, 4, 5]
+
+
+def printTable(data):
+    header = data[0].keys()
+    rows = [x.values() for x in data]
+    print(tabulate.tabulate(rows, header))
 
 
 class MSSQLConnection:
@@ -28,42 +38,35 @@ class MSSQLConnection:
             print("Connection not closed!")
             print(e)
 
-    def exempluProcedura(self, idDept):
-        try:
-            cmd = "EXEC dbo.exemplu_procedura ?;"
-            values = (idDept)
-            self.cursor.execute(cmd, values)
-            for elem in self.cursor.fetchall():
-                print(elem)
-        except Exception as e:
-            print(e)
-
-    def exempluFunctie(self, manager_id, salary=None):
-        try:
-            cmd = """\
-            SET NOCOUNT ON;
-            DECLARE @RC int;
-            EXEC @RC = dbo.GET_SUBORDINATES_WITH_LOWER_SALARY %s, %s;
-            SELECT @RC AS rc;
-            """
-            values = (str(manager_id), (str(salary or "NULL")))
-            self.cursor.execute(cmd, values)
-            emp_count = self.cursor.fetchall()[0]['rc']
-            print('Managerul cu id-ul ' + str(manager_id) + ' are ' + str(emp_count) +
-                  ' angajati cu salariul mai mic decat ' + (str(salary) or 'el'))
-        except Exception as e:
-            print(e)
-
     def call_GET_ALL_PACKAGES_BY_EMP_ID(self, id):
         try:
-            cmd = "EXEC dbo.GET_ALL_PACKAGES_BY_EMP_ID %s;"
+            cmd = "SELECT * FROM dbo.GET_ALL_PACKAGES_BY_EMP_ID(%d);"
             values = (id)
             self.cursor.execute(cmd, values)
-            print(self.cursor.fetchall())
-            for elem in self.cursor.fetchall():
-                print(elem)
+            return self.cursor.fetchall()
         except Exception as e:
             print(e)
+            return None
+
+    def call_GET_ALL_OFFERS_BY_STATUS(self, status):
+        try:
+            cmd = "SELECT * FROM dbo.GET_ALL_OFFERS_BY_STATUS(%s);"
+            values = (status)
+            self.cursor.execute(cmd, values)
+            return self.cursor.fetchall()
+        except Exception as e:
+            print(e)
+            return None
+
+    def call_GET_ALL_OFFERS_BY_STARS(self, stars):
+        try:
+            cmd = "SELECT * FROM dbo.GET_ALL_OFFERS_BY_STARS(%d);"
+            values = (stars)
+            self.cursor.execute(cmd, values)
+            return self.cursor.fetchall()
+        except Exception as e:
+            print(e)
+            return None
 
 
 if __name__ == "__main__":
@@ -71,22 +74,56 @@ if __name__ == "__main__":
                          'sa', 'bigStrong*Pwd')
     oc.openConnection()
 
-    oc.call_GET_ALL_PACKAGES_BY_EMP_ID(1)
+    while True:
+        inp = input(
+            'Enter command:'
+            + '\n\tGET_ALL_PACKAGES_BY_EMP_ID <id>'
+            + '\n\tGET_ALL_OFFERS_BY_STATUS <status (Pending / Done)>'
+            + '\n\tGET_ALL_OFFERS_BY_STARS <stars (1-5)>\n\texit\n')
 
-    # while True:
-    #     # read input
-    #     inp = input(
-    #         'Enter command: GET_ALL_PACKAGES_BY_EMP_ID <id> / get2 /get3 / exit\n')
-    #     if inp == 'exit':
-    #         break
+        # read input
+        if inp == 'exit':
+            break
 
-    #     # if input starts with GET_ALL_PACKAGES_BY_EMP_ID
-    #     if inp.startswith('GET_ALL_PACKAGES_BY_EMP_ID'):
-    #         # get the id
-    #         id = inp.split(' ')[1]
-    #         # execute the stored procedure
-    #         oc.call_GET_ALL_PACKAGES_BY_EMP_ID(id)
+        if inp.startswith('GET_ALL_PACKAGES_BY_EMP_ID'):
+            # get the id
+            id = inp.split(' ')[1]
+            # check if id is a number
+            if not id.isdigit():
+                print('Id must be a number')
+                continue
+            # execute the stored procedure
+            elems = oc.call_GET_ALL_PACKAGES_BY_EMP_ID(id)
+            if elems is None:
+                continue
+            # print the result
+            printTable(elems)
+        if inp.startswith('GET_ALL_OFFERS_BY_STATUS'):
+            # get the status
+            status = inp.split(' ')[1]
+            # check if status is valid
+            if status not in STATUSES:
+                print('Status must be one of: ' + str(STATUSES))
+                continue
+            # execute the stored procedure
+            elems = oc.call_GET_ALL_OFFERS_BY_STATUS(status)
+            if elems is None:
+                continue
+            # print the result
+            printTable(elems)
+        if inp.startswith('GET_ALL_OFFERS_BY_STARS'):
+            # get the stars
+            stars = inp.split(' ')[1]
+            stars = int(stars)
+            # check if stars is valid
+            if stars not in STARS:
+                print('Stars must be one of: ' + str(STARS))
+                continue
+            # execute the stored procedure
+            elems = oc.call_GET_ALL_OFFERS_BY_STARS(stars)
+            if elems is None:
+                continue
+            # print the result
+            printTable(elems)
 
-    # # oc.exempluProcedura(10)
-    # # oc.exempluFunctie(100, 20000)
     oc.closeConnection()

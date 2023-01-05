@@ -4,7 +4,7 @@ CREATE DATABASE tourism_db;
 Use tourism_db;
 
 CREATE TABLE employees (
-    "id" BIGINT NOT NULL,
+    "id" BIGINT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     "name" NVARCHAR(255) NOT NULL,
     "phone_number" NVARCHAR(255) NOT NULL,
     "job_title" NVARCHAR(255) NOT NULL,
@@ -12,25 +12,21 @@ CREATE TABLE employees (
     "created_at" date not null DEFAULT (GETDATE())
 );
 
-ALTER TABLE
-    employees ADD CONSTRAINT "employees_id_primary" PRIMARY KEY("id");
 CREATE TABLE countries (
-    "id" BIGINT NOT NULL,
+    "id" BIGINT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     "name" NVARCHAR(255) NOT NULL,
     "created_at" date not null DEFAULT (GETDATE())
 );
-ALTER TABLE
-    countries ADD CONSTRAINT "countries_id_primary" PRIMARY KEY("id");
+
 CREATE TABLE cities (
-    "id" BIGINT NOT NULL,
+    "id" BIGINT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     "name" NVARCHAR(255) NOT NULL,
     "country_id" BIGINT NOT NULL,
     "created_at" date not null DEFAULT (GETDATE())
 );
-ALTER TABLE
-    cities ADD CONSTRAINT "cities_id_primary" PRIMARY KEY("id");
+
 CREATE TABLE hotels (
-    "id" BIGINT NOT NULL,
+    "id" BIGINT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     "name" NVARCHAR(255) NOT NULL,
     "stars" INT NOT NULL,
     "city_id" BIGINT NOT NULL,
@@ -38,10 +34,9 @@ CREATE TABLE hotels (
     "phone_number" NVARCHAR(255) NOT NULL,
     "created_at" date not null DEFAULT (GETDATE())
 );
-ALTER TABLE
-    hotels ADD CONSTRAINT "hotels_id_primary" PRIMARY KEY("id");
+
 CREATE TABLE packages (
-    "id" BIGINT NOT NULL,
+    "id" BIGINT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     "transport_type" NVARCHAR(255) NOT NULL,
     "hotel_id" BIGINT NOT NULL,
     "start_date" DATE NOT NULL,
@@ -52,10 +47,9 @@ CREATE TABLE packages (
     "employee_id" BIGINT NOT NULL,
     "created_at" date not null DEFAULT (GETDATE())
 );
-ALTER TABLE
-    packages ADD CONSTRAINT "packages_id_primary" PRIMARY KEY("id");
+
 CREATE TABLE clients (
-    "id" BIGINT NOT NULL,
+    "id" BIGINT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     "name" NVARCHAR(255) NOT NULL,
     "email" NVARCHAR(255) NOT NULL,
     "phone_number" NVARCHAR(255) NOT NULL,
@@ -63,10 +57,9 @@ CREATE TABLE clients (
     "first_employee_id" BIGINT NOT NULL,
     "created_at" date not null DEFAULT (GETDATE())
 );
-ALTER TABLE
-    clients ADD CONSTRAINT "clients_id_primary" PRIMARY KEY("id");
+
 CREATE TABLE offers (
-    "id" BIGINT NOT NULL,
+    "id" BIGINT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     "client_id" BIGINT NOT NULL,
     "package_id" BIGINT NOT NULL,
     "final_price" BIGINT NOT NULL,
@@ -74,8 +67,8 @@ CREATE TABLE offers (
     "status" NVARCHAR(255) NOT NULL,
     "created_at" date not null DEFAULT (GETDATE())
 );
-ALTER TABLE
-    offers ADD CONSTRAINT "offers_id_primary" PRIMARY KEY("id");
+
+
 ALTER TABLE
     packages ADD CONSTRAINT "packages_employee_id_foreign" FOREIGN KEY("employee_id") REFERENCES "employees"("id");
 ALTER TABLE
