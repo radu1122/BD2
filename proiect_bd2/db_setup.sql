@@ -9,7 +9,7 @@ CREATE TABLE employees (
     "phone_number" NVARCHAR(255) NOT NULL,
     "job_title" NVARCHAR(255) NOT NULL,
     "email" NVARCHAR(255) NOT NULL,
-    "created_at" DATE NOT NULL
+    "created_at" date not null DEFAULT (GETDATE())
 );
 
 ALTER TABLE
@@ -17,7 +17,7 @@ ALTER TABLE
 CREATE TABLE countries (
     "id" BIGINT NOT NULL,
     "name" NVARCHAR(255) NOT NULL,
-    "created_at" DATE NOT NULL
+    "created_at" date not null DEFAULT (GETDATE())
 );
 ALTER TABLE
     countries ADD CONSTRAINT "countries_id_primary" PRIMARY KEY("id");
@@ -25,7 +25,7 @@ CREATE TABLE cities (
     "id" BIGINT NOT NULL,
     "name" NVARCHAR(255) NOT NULL,
     "country_id" BIGINT NOT NULL,
-    "created_at" DATE NOT NULL
+    "created_at" date not null DEFAULT (GETDATE())
 );
 ALTER TABLE
     cities ADD CONSTRAINT "cities_id_primary" PRIMARY KEY("id");
@@ -36,7 +36,7 @@ CREATE TABLE hotels (
     "city_id" BIGINT NOT NULL,
     "address" NVARCHAR(255) NOT NULL,
     "phone_number" NVARCHAR(255) NOT NULL,
-    "created_at" DATE NOT NULL
+    "created_at" date not null DEFAULT (GETDATE())
 );
 ALTER TABLE
     hotels ADD CONSTRAINT "hotels_id_primary" PRIMARY KEY("id");
@@ -50,7 +50,7 @@ CREATE TABLE packages (
     "number_of_people" BIGINT NOT NULL,
     "room_name" NVARCHAR(255) NOT NULL,
     "employee_id" BIGINT NOT NULL,
-    "created_at" DATE NOT NULL
+    "created_at" date not null DEFAULT (GETDATE())
 );
 ALTER TABLE
     packages ADD CONSTRAINT "packages_id_primary" PRIMARY KEY("id");
@@ -61,7 +61,7 @@ CREATE TABLE clients (
     "phone_number" NVARCHAR(255) NOT NULL,
     "generated_from" NVARCHAR(255) NOT NULL,
     "first_employee_id" BIGINT NOT NULL,
-    "created_at" DATE NOT NULL
+    "created_at" date not null DEFAULT (GETDATE())
 );
 ALTER TABLE
     clients ADD CONSTRAINT "clients_id_primary" PRIMARY KEY("id");
@@ -72,7 +72,7 @@ CREATE TABLE offers (
     "final_price" BIGINT NOT NULL,
     "employee_id" BIGINT NOT NULL,
     "status" NVARCHAR(255) NOT NULL,
-    "created_at" DATE NOT NULL
+    "created_at" date not null DEFAULT (GETDATE())
 );
 ALTER TABLE
     offers ADD CONSTRAINT "offers_id_primary" PRIMARY KEY("id");
@@ -92,4 +92,3 @@ ALTER TABLE
     offers ADD CONSTRAINT "offers_package_id_foreign" FOREIGN KEY("package_id") REFERENCES "packages"("id");
 ALTER TABLE
     offers ADD CONSTRAINT "offers_client_id_foreign" FOREIGN KEY("client_id") REFERENCES "clients"("id");
-

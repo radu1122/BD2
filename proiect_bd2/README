@@ -1,1 +1,28 @@
- sudo docker run --cap-add SYS_PTRACE -e 'ACCEPT_EULA=1' -e 'MSSQL_SA_PASSWORD=bigStrong*Pwd' -p 1433:1433 --name sqledge -d mcr.microsoft.com/azure-sql-edge
+Copyright Radu-Andrei Dumitrescu 341C3 2023. All rights reserved.
+
+Prerequisite:
+
+- docker installed
+- python3 installed
+
+How to run the db engine in a docker container:
+
+- sudo docker run --cap-add SYS_PTRACE -e 'ACCEPT_EULA=1' -e 'MSSQL_SA_PASSWORD=bigStrong\*Pwd' -p 1433:1433 --name sqledge -d mcr.microsoft.com/azure-sql-edge
+
+- DB USERNAME: sa
+- DB PASSWORD: bigStrong\*Pwd
+- DB PORT: 1433
+- DB NAME: tourism_db
+
+How to run the project:
+
+- run db_setup.sql script in the db to create the db and the tables
+- run populate_db.sql script in the db to populate the db with data
+- run create_reports.sql script in the db to create the reports
+- run the project with python3 main.py
+
+Biografie:
+
+- https://ocw.cs.pub.ro/courses/bd2/laboratoare/09
+- https://drawsql.app/
+- https://database.guide/how-to-install-sql-server-on-an-m1-mac-arm64/
